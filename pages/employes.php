@@ -3,8 +3,6 @@ require("../inc/function.php");
 
 if (isset($_GET['dept_name'])) {
     $dept_name = $_GET['dept_name'];
-
-    // Récupérer le numéro du département à partir de son nom
     $query = "SELECT dept_no FROM departments WHERE dept_name = '%s'";
     $query = sprintf($query, mysqli_real_escape_string(dbconnect(), $dept_name));
     $result = mysqli_query(dbconnect(), $query);
@@ -26,7 +24,7 @@ if (isset($_GET['dept_name'])) {
     <title>Employés du département <?= htmlspecialchars($dept_name) ?></title>
     <link rel="stylesheet" href="../assets/css/bootstrap.css">
     <script src="../assets/js/bootstrap.js"></script>
-    
+
 </head>
 
 <body>
@@ -40,7 +38,7 @@ if (isset($_GET['dept_name'])) {
         </thead>
         <tbody>
             <?php foreach ($employes as $employe) { ?>
-                <tr>
+                <tr onclick="window.location.href='fiches.php?employes=<?= $employe['emp_no'] ?>'" style="cursor: pointer;">
                     <td><?= $employe['first_name'] ?> </td>
                     <td><?= $employe['last_name'] ?></td>
                 </tr>
