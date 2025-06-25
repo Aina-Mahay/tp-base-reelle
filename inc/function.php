@@ -1,5 +1,4 @@
 <?php
-
 require("connexion.php");
 
 function recuperer_departements()
@@ -121,6 +120,7 @@ function rechercher($dep, $nom, $min, $max, $limit)
 
     return $valiny;
 }
+<<<<<<< HEAD
 function get_total_pages($dep, $nom, $min, $max) {
     $query = "
     SELECT COUNT(*) AS total
@@ -167,3 +167,6 @@ function recuperer_postes() {
     }
     return $postes;
 }
+=======
+ ?>
+>>>>>>> e6560e6 (php)
