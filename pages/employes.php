@@ -1,4 +1,4 @@
-<?php 
+<?php
 require("../inc/function.php");
 
 if (isset($_GET['dept_name'])) {
@@ -10,7 +10,6 @@ if (isset($_GET['dept_name'])) {
     $result = mysqli_query(dbconnect(), $query);
     $dept_no = mysqli_fetch_assoc($result)['dept_no'];
 
-    // Récupérer les employés du département
     $employes = recuperer_employes($dept_no);
 } else {
     echo "Aucun département sélectionné.";
@@ -20,17 +19,35 @@ if (isset($_GET['dept_name'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employés du département <?= htmlspecialchars($dept_name) ?></title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <script src="../assets/js/bootstrap.js"></script>
+    
 </head>
+
 <body>
     <h1>Employés du département <?= htmlspecialchars($dept_name) ?></h1>
-    <ul>
-        <?php foreach ($employes as $employe) { ?>
-            <li><?= $employe['first_name'] ?> <?= $employe['last_name'] ?></li>
-        <?php } ?>
-    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($employes as $employe) { ?>
+                <tr>
+                    <td><?= $employe['first_name'] ?> </td>
+                    <td><?= $employe['last_name'] ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+
 </body>
+
 </html>
