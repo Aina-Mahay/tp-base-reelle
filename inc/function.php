@@ -1,6 +1,4 @@
-<?
-
-use LDAP\Result;
+<?php
 
 require("connexion.php");
 
@@ -63,7 +61,8 @@ function recuperer_employe($emp_no)
     $employe = mysqli_fetch_assoc($result);
     return $employe;
 }
-function recuperer_depetsalaire($emp_no) {
+function recuperer_depetsalaire($emp_no)
+{
     $query = "SELECT d.dept_name, s.salary, s.from_date, s.to_date
               FROM employees e 
               JOIN dept_emp de ON de.emp_no = e.emp_no 
@@ -88,7 +87,8 @@ function recuperer_depetsalaire($emp_no) {
 
     return $dept_salaries;
 }
-function recuperer_historique_postes($emp_no) {
+function recuperer_historique_postes($emp_no)
+{
     $query = "SELECT t.title, t.from_date, t.to_date
               FROM titles t
               WHERE t.emp_no = $emp_no";
@@ -104,4 +104,24 @@ function recuperer_historique_postes($emp_no) {
     }
 
     return $postes;
+}
+function rechercher($dep, $nom, $min, $max, $limit)
+{
+    $query = "
+    SELECT e.emp_no, e.first_name, e.last_name, e.birth_date, d.dept_name
+    FROM employees e
+    JOIN dept_emp de ON e.emp_no = de.emp_no
+    JOIN departments d ON d.dept_no = de.dept_no
+    WHERE d.dept_name LIKE '%%%s%%'
+    AND e.first_name LIKE '%%%s%%'
+    AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) BETWEEN %d AND %d
+    LIMIT %d,20
+    ";
+    $query = sprintf($query, $dep, $nom, $min, $max, $limit);
+    $result = mysqli_query(dbconnect(), $query);
+    $valiny = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $valiny[] = $row;
+    }
+    return $valiny;
 }
