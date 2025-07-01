@@ -112,16 +112,30 @@ function rechercher($dep, $nom, $min, $max, $limit)
     FROM employees e
     JOIN dept_emp de ON e.emp_no = de.emp_no
     JOIN departments d ON d.dept_no = de.dept_no
-    WHERE d.dept_name LIKE '%%%s%%'
-    AND e.first_name LIKE '%%%s%%'
-    AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) BETWEEN %d AND %d
-    LIMIT %d,20
-    ";
-    $query = sprintf($query, $dep, $nom, $min, $max, $limit);
+    WHERE 1=1";
+
+    if (!empty($dep)) {
+        $query .= " AND d.dept_no LIKE '%" . $dep . "%'";
+    }
+    if (!empty($nom)) {
+        $query .= " AND e.first_name LIKE '%" . $nom . "%'";
+    }
+    if (!empty($min)) {
+        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) >= " . intval($min);
+    }
+    if (!empty($max)) {
+        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) <= " . intval($max);
+    }
+
+    $query .= " LIMIT " . intval($limit) . ", 20";
+
     $result = mysqli_query(dbconnect(), $query);
     $valiny = [];
+
     while ($row = mysqli_fetch_assoc($result)) {
         $valiny[] = $row;
     }
+
     return $valiny;
 }
+?>

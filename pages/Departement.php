@@ -15,7 +15,7 @@ require("../inc/function.php");
 
 <body>
 
-    <form action="resultats.php" method="post" class="container mt-4">
+    <form action="resultats.php" method="GET" class="container mt-4">
         <div class="row g-3">
             <div class="col-md-4">
                 <label for="departement" class="form-label">Département</label>
