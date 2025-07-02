@@ -16,11 +16,7 @@ function recuperer_departements()
 
 function recuperer_manager_par_departement()
 {
-    $query = "SELECT d.dept_name, e.first_name, e.last_name 
-              FROM employees e 
-              JOIN dept_manager dm ON e.emp_no = dm.emp_no 
-              JOIN departments d ON d.dept_no = dm.dept_no 
-              ORDER BY d.dept_name, e.last_name";
+    $query = "SELECT * FROM v_dept_manager";
     $result = mysqli_query(dbconnect(), $query);
     $departements = [];
 
@@ -34,11 +30,7 @@ function recuperer_manager_par_departement()
 }
 function recuperer_employes($dept_no)
 {
-    $query = "SELECT e.first_name, e.last_name, e.emp_no
-              FROM employees e 
-              JOIN dept_emp de ON de.emp_no = e.emp_no 
-              WHERE de.dept_no = '%s'
-              LIMIT 100";
+    $query = "SELECT * FROM v_dept_emp_curr WHERE dept_no = '%s' LIMIT 100";
     $query = sprintf($query,  $dept_no);
     $result = mysqli_query(dbconnect(), $query);
     $employes = [];
@@ -51,12 +43,7 @@ function recuperer_employes($dept_no)
 
 function recuperer_employe($emp_no)
 {
-    $query = "SELECT e.birth_date, e.first_name, e.last_name, e.gender, e.hire_date ,d.dept_name
-    FROM employees e 
-    JOIN dept_emp de ON de.emp_no = e.emp_no 
-    JOIN departments d ON d.dept_no = de.dept_no
-    WHERE e.emp_no = $emp_no";
-    // $query = sprintf($emp_no, $query); 
+    $query = "SELECT * FROM v_dept_emp_curr WHERE emp_no = $emp_no";
     $result = mysqli_query(dbconnect(), $query);
     $employe = mysqli_fetch_assoc($result);
     return $employe;
@@ -108,27 +95,23 @@ function recuperer_historique_postes($emp_no)
 function rechercher($dep, $nom, $min, $max, $limit)
 {
     $query = "
-    SELECT e.emp_no, e.first_name, e.last_name, e.birth_date, d.dept_name
-    FROM employees e
-    JOIN dept_emp de ON e.emp_no = de.emp_no
-    JOIN departments d ON d.dept_no = de.dept_no
+    SELECT * FROM v_dept_emp_curr
     WHERE 1=1";
 
     if (!empty($dep) && $dep !== "tous") {
-        $query .= " AND d.dept_no LIKE '%" . $dep . "%'";
+        $query .= " AND dept_no LIKE '%" . $dep . "%'";
     }
     if (!empty($nom)) {
-        $query .= " AND e.first_name LIKE '%" . $nom . "%'";
+        $query .= " AND first_name LIKE '%" . $nom . "%'";
     }
     if (!empty($min)) {
-        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) >= " . intval($min);
+        $query .= " AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) >= " . intval($min);
     }
     if (!empty($max)) {
-        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) <= " . intval($max);
+        $query .= " AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) <= " . intval($max);
     }
 
     $query .= " LIMIT " . intval($limit) . ", 20";
-
     $result = mysqli_query(dbconnect(), $query);
     $valiny = [];
 
@@ -162,7 +145,6 @@ function get_total_pages($dep, $nom, $min, $max) {
     $result = mysqli_query(dbconnect(), $query);
     $row = mysqli_fetch_assoc($result);
 
-    // Calculer le nombre total de pages (20 résultats par page)
     return ceil($row['total'] / 20);
 }
 ?>

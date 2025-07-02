@@ -40,8 +40,8 @@ $resultat = rechercher($dep, $nom, $min, $max, $offset);
                 </thead>
                 <tbody>
                     <?php foreach ($resultat as $index => $employe) { ?>
-                        <tr>
-                            <td><?= $index + 1 + $offset ?></td>
+                        <tr onclick="window.location.href='fiches.php?employes=<?= $employe['emp_no'] ?>'" style="cursor: pointer;">
+                        <td><?= $index + 1 + $offset ?></td>
                             <td><?= htmlspecialchars($employe['first_name']) ?></td>
                             <td><?= htmlspecialchars($employe['last_name']) ?></td>
                             <td><?= htmlspecialchars($employe['birth_date']) ?></td>
