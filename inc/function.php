@@ -114,7 +114,7 @@ function rechercher($dep, $nom, $min, $max, $limit)
     JOIN departments d ON d.dept_no = de.dept_no
     WHERE 1=1";
 
-    if (!empty($dep)) {
+    if (!empty($dep) && $dep !== "tous") {
         $query .= " AND d.dept_no LIKE '%" . $dep . "%'";
     }
     if (!empty($nom)) {
@@ -137,5 +137,32 @@ function rechercher($dep, $nom, $min, $max, $limit)
     }
 
     return $valiny;
+}
+function get_total_pages($dep, $nom, $min, $max) {
+    $query = "
+    SELECT COUNT(*) AS total
+    FROM employees e
+    JOIN dept_emp de ON e.emp_no = de.emp_no
+    JOIN departments d ON d.dept_no = de.dept_no
+    WHERE 1=1";
+
+    if (!empty($dep) && $dep !== "tous") {
+        $query .= " AND d.dept_no LIKE '%" . mysqli_real_escape_string(dbconnect(), $dep) . "%'";
+    }
+    if (!empty($nom)) {
+        $query .= " AND e.first_name LIKE '%" . mysqli_real_escape_string(dbconnect(), $nom) . "%'";
+    }
+    if (!empty($min)) {
+        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) >= " . intval($min);
+    }
+    if (!empty($max)) {
+        $query .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) <= " . intval($max);
+    }
+
+    $result = mysqli_query(dbconnect(), $query);
+    $row = mysqli_fetch_assoc($result);
+
+    // Calculer le nombre total de pages (20 résultats par page)
+    return ceil($row['total'] / 20);
 }
 ?>

@@ -8,7 +8,9 @@ $max = isset($_GET['age_max']) ? $_GET['age_max'] : 200;
 $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 $offset = $page * 20;
 
+$total_pages = get_total_pages($dep, $nom, $min, $max);
 $resultat = rechercher($dep, $nom, $min, $max, $offset);
+
 ?>
 
 <!DOCTYPE html>
@@ -52,12 +54,19 @@ $resultat = rechercher($dep, $nom, $min, $max, $offset);
             <p>Aucun résultat trouvé.</p>
         <?php } ?>
 
-        <!-- Liens de pagination -->
+        <!-- Pagination -->
         <div class="mt-3">
-            <?php if ($page > 0) { ?>
-                <a href="resultats.php?page=<?= $page - 1 ?>&departement=<?= urlencode($dep) ?>&nom_employe=<?= urlencode($nom) ?>&age_min=<?= $min ?>&age_max=<?= $max ?>" class="btn btn-secondary">Précédent</a>
-            <?php } ?>
-            <a href="resultats.php?page=<?= $page + 1 ?>&departement=<?= urlencode($dep) ?>&nom_employe=<?= urlencode($nom) ?>&age_min=<?= $min ?>&age_max=<?= $max ?>" class="btn btn-primary">Suivant</a>
+            <nav>
+                <ul class="pagination">
+                    <?php for ($i = 0; $i < $total_pages; $i++) { ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                            <a class="page-link" href="resultats.php?page=<?= $i ?>&departement=<?= urlencode($dep) ?>&nom_employe=<?= urlencode($nom) ?>&age_min=<?= $min ?>&age_max=<?= $max ?>">
+                                <?= $i + 1 ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </nav>
         </div>
     </div>
 </body>

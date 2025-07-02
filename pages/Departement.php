@@ -23,6 +23,7 @@ require("../inc/function.php");
                     <?php
                     $departements = recuperer_departements();
                     foreach ($departements as $departement) { ?>
+                        <option value="tous">tous</option>
                         <option value="<?= $departement['dept_no'] ?>"><?= $departement['dept_name'] ?></option>
                     <?php } ?>
                 </select>
