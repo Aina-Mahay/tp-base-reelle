@@ -120,7 +120,8 @@ function rechercher($dep, $nom, $min, $max, $limit)
 
     return $valiny;
 }
-function get_total_pages($dep, $nom, $min, $max) {
+function get_total_pages($dep, $nom, $min, $max)
+{
     $query = "
     SELECT COUNT(*) AS total
     FROM employees e
@@ -143,10 +144,13 @@ function get_total_pages($dep, $nom, $min, $max) {
 
     $result = mysqli_query(dbconnect(), $query);
     $row = mysqli_fetch_assoc($result);
-
-    return ceil($row['total'] / 20);
+    if ($row && isset($row['total'])) {
+        return ceil($row['total'] / 20);
+    }
+    return 1;
 }
-function recuperer_nb_employes_par_departement() {
+function recuperer_nb_employes_par_departement()
+{
     $query = "SELECT dept_name, nb FROM v_nb_emp_dep v1";
     $result = mysqli_query(dbconnect(), $query);
     $nb_emp = [];
@@ -155,7 +159,8 @@ function recuperer_nb_employes_par_departement() {
     }
     return $nb_emp;
 }
-function recuperer_postes() {
+function recuperer_postes()
+{
     $query = "SELECT DISTINCT title FROM titles";
     $result = mysqli_query(dbconnect(), $query);
     $postes = [];
@@ -164,5 +169,4 @@ function recuperer_postes() {
     }
     return $postes;
 }
-
- ?>
+?>
