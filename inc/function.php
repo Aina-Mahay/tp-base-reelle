@@ -120,7 +120,6 @@ function rechercher($dep, $nom, $min, $max, $limit)
 
     return $valiny;
 }
-<<<<<<< HEAD
 function get_total_pages($dep, $nom, $min, $max) {
     $query = "
     SELECT COUNT(*) AS total
@@ -147,8 +146,6 @@ function get_total_pages($dep, $nom, $min, $max) {
 
     return ceil($row['total'] / 20);
 }
-?>
-<?php
 function recuperer_nb_employes_par_departement() {
     $query = "SELECT dept_name, nb FROM v_nb_emp_dep v1";
     $result = mysqli_query(dbconnect(), $query);
@@ -167,6 +164,5 @@ function recuperer_postes() {
     }
     return $postes;
 }
-=======
+
  ?>
->>>>>>> e6560e6 (php)
