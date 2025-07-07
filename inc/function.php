@@ -169,4 +169,9 @@ function recuperer_postes()
     }
     return $postes;
 }
+<<<<<<< HEAD
 ?>
+=======
+
+?>
+>>>>>>> 70d60ab (dd)

@@ -1,12 +1,12 @@
 <?php
 require("../inc/function.php");
 
+// Récupérer les paramètres de recherche depuis l'URL
 $dep = isset($_GET['departement']) ? $_GET['departement'] : '';
 $nom = isset($_GET['nom_employe']) ? $_GET['nom_employe'] : '';
 $min = isset($_GET['age_min']) ? $_GET['age_min'] : 0;
-$max = isset($_GET['age_max']) ? $_GET['age_max'] : 200;
-$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
-$offset = $page * 20;
+$max = isset($_GET['age_max']) ? $_GET['age_max'] : 100;
+$limit = 20;
 
 $total_pages = get_total_pages($dep, $nom, $min, $max);
 $resultat = rechercher($dep, $nom, $min, $max, $offset);
