@@ -1,12 +1,12 @@
 <?php
 require("../inc/function.php");
 
-// Récupérer les paramètres de recherche depuis l'URL
-$dep = isset($_POST['departement']) ? $_POST['departement'] : '';
-$nom = isset($_POST['nom_employe']) ? $_POST['nom_employe'] : '';
-$min = isset($_POST['age_min']) ? $_POST['age_min'] : 0;
-$max = isset($_POST['age_max']) ? $_POST['age_max'] : 100;
-$limit = 20;
+$dep = isset($_GET['departement']) ? $_GET['departement'] : '';
+$nom = isset($_GET['nom_employe']) ? $_GET['nom_employe'] : '';
+$min = isset($_GET['age_min']) ? $_GET['age_min'] : 0;
+$max = isset($_GET['age_max']) ? $_GET['age_max'] : 200;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
+$offset = $page * 20;
 
 $total_pages = get_total_pages($dep, $nom, $min, $max);
 $resultat = rechercher($dep, $nom, $min, $max, $offset);
@@ -40,8 +40,8 @@ $resultat = rechercher($dep, $nom, $min, $max, $offset);
                 </thead>
                 <tbody>
                     <?php foreach ($resultat as $index => $employe) { ?>
-                        <tr onclick="window.location.href='fiches.php?employes=<?= $employe['emp_no'] ?>'" style="cursor: pointer;">
-                        <td><?= $index + 1 + $offset ?></td>
+                        <tr>
+                            <td><?= $index + 1 + $offset ?></td>
                             <td><?= htmlspecialchars($employe['first_name']) ?></td>
                             <td><?= htmlspecialchars($employe['last_name']) ?></td>
                             <td><?= htmlspecialchars($employe['birth_date']) ?></td>
