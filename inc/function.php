@@ -148,3 +148,22 @@ function get_total_pages($dep, $nom, $min, $max) {
     return ceil($row['total'] / 20);
 }
 ?>
+<?php
+function recuperer_nb_employes_par_departement() {
+    $query = "SELECT dept_name, nb FROM v_nb_emp_dep v1";
+    $result = mysqli_query(dbconnect(), $query);
+    $nb_emp = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $nb_emp[$row['dept_name']] = $row['nb'];
+    }
+    return $nb_emp;
+}
+function recuperer_postes() {
+    $query = "SELECT DISTINCT title FROM titles";
+    $result = mysqli_query(dbconnect(), $query);
+    $postes = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $postes[] = $row['title'];
+    }
+    return $postes;
+}

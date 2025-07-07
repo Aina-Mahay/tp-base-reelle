@@ -12,6 +12,20 @@ require("../inc/function.php");
     <link rel="stylesheet" href="../assets/css/bootstrap.css">
     <script src="../assets/js/bootstrap.js"></script>
 </head>
+<?php
+$postes = recuperer_postes();
+?>
+<div class="container mt-4">
+    <h4>Liste des titres de postes :</h4>
+    <ul class="list-inline">
+        <?php foreach ($postes as $poste) { ?>
+            <li class="list-inline-item badge bg-info text-dark mb-2">
+                <a href="poste.php?titre=<?= $poste ?>" class="text-dark text-decoration-none"><?= $poste ?></a>
+            </li>
+        <?php } ?>
+    </ul>
+</div>
+</body>
 
 <body>
 
@@ -49,12 +63,18 @@ require("../inc/function.php");
     </form>
 
 
+
+
     <?php
+    $nb_emp = recuperer_nb_employes_par_departement();
     $result = recuperer_manager_par_departement();
     foreach ($result as $dept_name => $managers) { ?>
         <h3>
             <?= $dept_name ?>
-            <a href="employes.php?dept_name=<?= $dept_name ?>">employés</a>
+            <span class="badge bg-secondary">
+                <?= isset($nb_emp[$dept_name]) ? $nb_emp[$dept_name] . ' employés' : '0 employé' ?>
+            </span>
+            <a href="employes.php?dept_name=<?= urlencode($dept_name) ?>">employés</a>
         </h3>
         <ul class="list-group">
             <?php foreach ($managers as $manager) { ?>
